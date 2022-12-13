@@ -1,6 +1,10 @@
 package co.laeng.airquality.type;
 
+import lombok.Getter;
+
+@Getter
 public enum PollutantType {
+    UNKNOWN("알 수 없음", "Unknown", ""),
     PM25("미세먼지", "PM-2.5", "µg/m³"),
     PM10("초미세먼지", "PM-10", "µg/m³"),
     SO2("아황산가스", "SO₂", "ppm"),
@@ -16,17 +20,5 @@ public enum PollutantType {
         this.name = name;
         this.formula = formula;
         this.unit = unit;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getFormula() {
-        return formula;
-    }
-
-    public String getUnit() {
-        return unit;
     }
 }

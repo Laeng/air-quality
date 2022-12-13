@@ -2,8 +2,10 @@ package co.laeng.airquality.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class CityPollutionDTO {
     private final String city;
     private final PollutantDTO pm25;
