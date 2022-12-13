@@ -15,7 +15,7 @@ public class SeoulAirQualityAPI {
     SeoulAirQualityAPI() {
 
     }
-    
+
     public static SeoulAirQualityAPI getInstance() {
         if (instance == null) {
             instance = new SeoulAirQualityAPI();
@@ -26,8 +26,7 @@ public class SeoulAirQualityAPI {
 
     public SeoulAirQualityResult getRealTimeAirQuality() throws IOException {
         Response<SeoulAirQualityResult> response = this.getSeoulAirQualityResponse();
-
-        return new SeoulAirQualityResult();
+        return response.body();
     }
 
     private Response<SeoulAirQualityResult> getSeoulAirQualityResponse() throws IOException {
