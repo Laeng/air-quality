@@ -10,11 +10,11 @@ public enum QualityGradeType {
     Danger(3, "매우 나쁨");
 
     private final Integer id;
-    private final String name;
+    private final String grade;
 
     QualityGradeType(Integer id, String name) {
         this.id = id;
-        this.name = name;
+        this.grade = name;
     }
 
     public static QualityGradeType form(int id) {
@@ -25,6 +25,6 @@ public enum QualityGradeType {
 
     @Override
     public String toString() {
-        return this.name;
+        return this.grade;
     }
 }
