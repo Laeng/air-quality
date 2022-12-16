@@ -3,81 +3,52 @@ package co.laeng.airquality.controller;
 import co.laeng.airquality.dto.AirQualityDTO;
 import co.laeng.airquality.dto.CityPollutionDTO;
 import co.laeng.airquality.dto.PollutantDTO;
+import co.laeng.airquality.service.AirQualityService;
 import co.laeng.airquality.type.PollutantType;
 import co.laeng.airquality.type.StateType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/v1/api/air-quality")
+@RequestMapping("/api/v1/air-quality")
 public class AirQualityController {
 
+    private final AirQualityService airQualityService;
+
+    @Autowired
+    public AirQualityController(
+            AirQualityService airQualityService
+    ) {
+        this.airQualityService = airQualityService;
+    }
+
     @GetMapping("/{state}")
-    public ResponseEntity<AirQualityDTO> findByRegionCode(
+    public ResponseEntity<AirQualityDTO> getAirQuality(
             @PathVariable(name = "state") String state,
             @RequestParam(name = "city", required = false) String city
     ) {
-        try {
-            List<CityPollutionDTO> pollutions = StateType.from(state).getData();
-            AirQualityDTO airQuality = this.createAirQualityDTO(
-                    state.toLowerCase(),
-                    this.createPM25AverageDTO(pollutions),
-                    this.filterByCityName(pollutions, city)
-            );
+        AirQualityDTO dto = this.airQualityService.getAirQuality(state);
 
-            return new ResponseEntity<>(
-                    airQuality,
-                    new HttpHeaders(),
-                    HttpStatus.OK
-            );
-        } catch (RuntimeException | IOException exception) {
-            return new ResponseEntity<>(
-                    this.createAirQualityDTO("", null, null),
-                    new HttpHeaders(),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+        if (dto != null && city != null) {
+            CityPollutionDTO cityPollution = dto.getCities().stream()
+                    .filter(cityDTO -> cityDTO.getCity().equals(city))
+                    .findFirst()
+                    .orElseThrow();
 
-    private PollutantDTO createPM25AverageDTO(List<CityPollutionDTO> pollutions) {
-        return PollutantDTO.builder()
-                .pollutant(PollutantType.PM25)
-                .value(this.calculatePM25Average(pollutions))
-                .build();
-    }
-
-    private double calculatePM25Average(List<CityPollutionDTO> pollutions) {
-        double sum = pollutions.stream()
-                .mapToDouble(dto -> dto.getPm25().getValue())
-                .sum();
-
-        return sum / pollutions.size();
-    }
-
-    private List<CityPollutionDTO> filterByCityName(List<CityPollutionDTO> cities, String city) {
-        if (city != null) {
-            return cities.stream()
-                    .filter(dto -> dto.getCity().equals(city.toLowerCase()))
-                    .collect(Collectors.toList());
+            dto = new AirQualityDTO(
+                    dto.getState(),
+                    dto.getStateAvg(),
+                    List.of(cityPollution));
         }
 
-        return cities;
-    }
-
-    private AirQualityDTO createAirQualityDTO(
-            String state,
-            PollutantDTO stateAvg,
-            List<CityPollutionDTO> cities
-    ) {
-        return AirQualityDTO.builder()
-                .state(state)
-                .stateAvg(stateAvg)
-                .cities(cities)
-                .build();
+        return new ResponseEntity<>(dto, new HttpHeaders(), HttpStatus.OK);
     }
 }
