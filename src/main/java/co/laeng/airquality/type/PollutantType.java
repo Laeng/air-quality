@@ -10,7 +10,7 @@ public enum PollutantType {
     SO2("아황산가스", "SO₂", "ppm"),
     NO2("이산화질소", "NO₂", "ppm"),
     O3("오존", "O₃", "ppm"),
-    CO("이산화질소","CO", "ppm");
+    CO("일산화탄소","CO", "ppm");
 
     private final String name;
     private final String formula;

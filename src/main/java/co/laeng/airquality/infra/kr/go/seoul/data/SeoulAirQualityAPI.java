@@ -21,7 +21,6 @@ public class SeoulAirQualityAPI {
     private Response<SeoulAirQualityResult> getSeoulAirQualityResponse() throws IOException {
         SeoulAirQualityInterface airQualityInterface = this.getSeoulAirQualityInterface();
         Call<SeoulAirQualityResult> call = airQualityInterface.getRealTimeAirQuality(this.apiKey);
-
         return call.execute();
     }
 

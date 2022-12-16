@@ -1,0 +1,20 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+= API 문서
+
+== 대기질 정보 가져오기
+
+기본 정보
+
+include::{snippets}/air-quality/http-request.adoc[]
+
+include::{snippets}/air-quality/path-parameters.adoc[]
+
+파리미터
+include::{snippets}/air-quality/request-parameters.adoc[]
+
+결과
+
+include::{snippets}/air-quality/http-response.adoc[]
