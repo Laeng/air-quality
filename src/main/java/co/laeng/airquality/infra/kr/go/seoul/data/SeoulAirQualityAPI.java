@@ -1,27 +1,16 @@
 package co.laeng.airquality.infra.kr.go.seoul.data;
 
-import org.springframework.beans.factory.annotation.Value;
 import retrofit2.Call;
 import retrofit2.Response;
 
 import java.io.IOException;
 
 public class SeoulAirQualityAPI {
-    private static SeoulAirQualityAPI instance;
 
-    @Value("${api-secret-keys.kr.go.seoul.data.seoul-air-quality}")
-    private String SEOUL_AIR_QUALITY_KEY;
+    private final String apiKey;
 
-    SeoulAirQualityAPI() {
-
-    }
-
-    public static SeoulAirQualityAPI getInstance() {
-        if (instance == null) {
-            instance = new SeoulAirQualityAPI();
-        }
-
-        return instance;
+    public SeoulAirQualityAPI(String key) {
+        this.apiKey = key;
     }
 
     public SeoulAirQualityResult getRealTimeAirQuality() throws IOException {
@@ -31,7 +20,7 @@ public class SeoulAirQualityAPI {
 
     private Response<SeoulAirQualityResult> getSeoulAirQualityResponse() throws IOException {
         SeoulAirQualityInterface airQualityInterface = this.getSeoulAirQualityInterface();
-        Call<SeoulAirQualityResult> call = airQualityInterface.getRealTimeAirQuality(SEOUL_AIR_QUALITY_KEY);
+        Call<SeoulAirQualityResult> call = airQualityInterface.getRealTimeAirQuality(this.apiKey);
 
         return call.execute();
     }

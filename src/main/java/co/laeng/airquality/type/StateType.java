@@ -1,10 +1,7 @@
 package co.laeng.airquality.type;
 
-import co.laeng.airquality.config.ApiSecretConfig;
 import co.laeng.airquality.dto.CityPollutionDTO;
-import co.laeng.airquality.infra.kr.go.seoul.data.SeoulAirQualityAPI;
-import co.laeng.airquality.infra.kr.go.seoul.data.SeoulAirQualityResult;
-import co.laeng.airquality.util.AirQualityDtoConverter;
+import co.laeng.airquality.service.convert.SeoulAirQualityService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,17 +11,13 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @Getter
 public enum StateType {
     SEOUL("seoul") {
         @Override
         public List<CityPollutionDTO> getData() throws IOException {
-            SeoulAirQualityResult result = this.getSeoulAirQualityResult();
-            return result.getRealtimeCityAir().getRow().stream()
-                    .map(AirQualityDtoConverter::toCityPollutionDTO)
-                    .collect(Collectors.toList());
+            return this.getSeoulAirQualityService().toCityPollutionDTOList();
         }
     },
     BUSAN("busan") {
@@ -35,7 +28,7 @@ public enum StateType {
     };
 
     private final String state;
-    private ApiSecretConfig apiSecretConfig;
+    private SeoulAirQualityService seoulAirQualityService;
 
     StateType(String state) {
         this.state = state;
@@ -49,33 +42,22 @@ public enum StateType {
     }
 
     @Component
-    public static class ConfigInjector {
+    public static class ServiceInjector {
         @Autowired
-        private ApiSecretConfig apiSecretConfig;
+        private SeoulAirQualityService seoulAirQualityService;
+
         @PostConstruct
-        public void postConstruct() {
-            try {
-                Arrays.stream(StateType.values()).forEach(state -> state.apiSecretConfig = apiSecretConfig);
-            }
-            catch(Exception e) {
-                throw e;
-            }
+        public void initialize() {
+            Arrays.stream(StateType.values()).forEach(this::injectService);
         }
+
+        private void injectService(StateType state) {
+            state.seoulAirQualityService = this.seoulAirQualityService;
+        }
+
+
     }
 
     public abstract List<CityPollutionDTO> getData() throws IOException;
-
-    public SeoulAirQualityResult getSeoulAirQualityResult() throws IOException {
-        this.apiSecretConfig.getSecrets().forEach(nameKey -> System.out.println(nameKey.getKey() + "  " + nameKey.getName()));
-
-        ApiSecretConfig.NameKey secret = this.apiSecretConfig.getSecrets().stream()
-                .filter(nameKey -> nameKey.getName().equals("air-quality-seoul"))
-                .findFirst()
-                .orElseThrow();
-
-        SeoulAirQualityAPI api = new SeoulAirQualityAPI(secret.getKey());
-
-        return api.getRealTimeAirQuality();
-    }
 
 }

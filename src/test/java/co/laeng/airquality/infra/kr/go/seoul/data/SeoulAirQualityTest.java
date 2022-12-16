@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class SeoulAirQualityTest {
 
-    @Value("${api-secret-keys.kr.go.seoul.data.seoul-air-quality}")
+    @Value("${secret.seoul-air-quality}")
     private String SEOUL_AIR_QUALITY_KEY;
 
     @Test
