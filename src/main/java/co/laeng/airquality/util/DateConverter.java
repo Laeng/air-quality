@@ -6,9 +6,8 @@ import java.time.format.DateTimeFormatter;
 
 public class DateConverter {
     public static String toISO8601(String datetime) {
-        String date = datetime.substring(0, 7);
+        String date = datetime.substring(0, 8);
         String time = timeFormat(datetime.substring(8));
-
         return getISO8601(date, time).format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
@@ -26,7 +25,7 @@ public class DateConverter {
                 DateTimeFormatter.ofPattern("yyyyMMddHHmm")
         );
 
-        iso8601.atZone(ZoneId.of("ASIA/SEOUL"));
+        iso8601.atZone(ZoneId.of("Asia/Seoul"));
 
         return iso8601;
     }
