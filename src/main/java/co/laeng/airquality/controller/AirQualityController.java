@@ -29,20 +29,25 @@ public class AirQualityController {
             @PathVariable(name = "state") String state,
             @RequestParam(name = "city", required = false) String city
     ) {
-        AirQualityDTO dto = this.airQualityService.getAirQuality(state);
+        try {
+            AirQualityDTO dto = this.airQualityService.getAirQuality(state);
 
-        if (dto != null && city != null) {
-            CityPollutionDTO cityPollution = dto.getCities().stream()
-                    .filter(cityDTO -> cityDTO.getCity().equals(city))
-                    .findFirst()
-                    .orElseThrow();
+            if (dto != null && city != null) {
+                CityPollutionDTO cityPollution = dto.getCities().stream()
+                        .filter(cityDTO -> cityDTO.getCity().equals(city))
+                        .findFirst()
+                        .orElseThrow();
 
-            dto = new AirQualityDTO(
-                    dto.getState(),
-                    dto.getStateAvg(),
-                    List.of(cityPollution));
+                dto = new AirQualityDTO(
+                        dto.getState(),
+                        dto.getStateAvg(),
+                        List.of(cityPollution));
+            }
+
+            return new ResponseEntity<>(dto, new HttpHeaders(), HttpStatus.OK);
+
+        } catch (RuntimeException exception) {
+            return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
         }
-
-        return new ResponseEntity<>(dto, new HttpHeaders(), HttpStatus.OK);
     }
 }
