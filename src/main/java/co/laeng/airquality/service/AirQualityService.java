@@ -36,7 +36,7 @@ public class AirQualityService {
                     pollutions
             );
 
-        } catch (RuntimeException | IOException exception) {
+        } catch (RuntimeException exception) {
             System.out.println(exception.getMessage());
             Arrays.stream(exception.getStackTrace())
                     .forEach(e -> System.out.println(e.toString()));

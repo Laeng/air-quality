@@ -6,14 +6,12 @@ import co.laeng.airquality.infra.kr.go.seoul.data.SeoulAirQualityResult;
 import co.laeng.airquality.repository.StateAirQualityRepository;
 import co.laeng.airquality.type.StateType;
 import co.laeng.airquality.util.AirQualityDtoConverter;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Repository
 public class SeoulAirQualityRepository implements StateAirQualityRepository {
 

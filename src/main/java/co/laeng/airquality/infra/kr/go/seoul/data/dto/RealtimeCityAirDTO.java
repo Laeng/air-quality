@@ -9,7 +9,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class RealtimeCityAirDTO {
     @JsonProperty("list_total_count")
     private int listTotalCount;
