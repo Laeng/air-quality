@@ -6,13 +6,14 @@ import co.laeng.airquality.infra.kr.go.seoul.data.SeoulAirQualityResult;
 import co.laeng.airquality.repository.StateAirQualityRepository;
 import co.laeng.airquality.type.StateType;
 import co.laeng.airquality.util.AirQualityDtoConverter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Repository
 public class SeoulAirQualityRepository implements StateAirQualityRepository {
 
@@ -21,6 +22,10 @@ public class SeoulAirQualityRepository implements StateAirQualityRepository {
 
     @Override
     public List<CityPollutionDTO> getCityPollution() throws RuntimeException {
+        if (this.key == null) {
+            throw new RuntimeException("[repository] 서울시 대기질 API 인증 키를 찾을 수 없습니다.");
+        }
+
         SeoulAirQualityAPI api = new SeoulAirQualityAPI(this.key);
         SeoulAirQualityResult result = api.getRealTimeAirQuality();
 
