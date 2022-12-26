@@ -2,6 +2,7 @@ package co.laeng.airquality.util;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class DateConverter {
@@ -19,14 +20,12 @@ public class DateConverter {
         return time;
     }
 
-    private static LocalDateTime getISO8601(String date, String time) {
-        LocalDateTime iso8601 = LocalDateTime.parse(
+    private static ZonedDateTime getISO8601(String date, String time) {
+        LocalDateTime local = LocalDateTime.parse(
                 date + time,
                 DateTimeFormatter.ofPattern("yyyyMMddHHmm")
         );
 
-        iso8601.atZone(ZoneId.of("Asia/Seoul"));
-
-        return iso8601;
+        return ZonedDateTime.of(local, ZoneId.of("Asia/Seoul"));
     }
 }
