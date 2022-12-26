@@ -7,6 +7,6 @@ import java.io.IOException;
 import java.util.List;
 
 public interface StateAirQualityRepository {
-    List<CityPollutionDTO> getCityPollution() throws IOException;
+    List<CityPollutionDTO> getCityPollution() throws RuntimeException;
     StateType getStateType();
 }

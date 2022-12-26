@@ -20,7 +20,7 @@ public class SeoulAirQualityRepository implements StateAirQualityRepository {
     private String key;
 
     @Override
-    public List<CityPollutionDTO> getCityPollution() throws IOException {
+    public List<CityPollutionDTO> getCityPollution() throws RuntimeException {
         SeoulAirQualityAPI api = new SeoulAirQualityAPI(this.key);
         SeoulAirQualityResult result = api.getRealTimeAirQuality();
 
