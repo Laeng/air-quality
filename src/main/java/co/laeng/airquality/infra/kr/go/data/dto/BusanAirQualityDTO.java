@@ -14,7 +14,7 @@ public class BusanAirQualityDTO {
     private int areaIndex;
 
     @JsonProperty("controlnumber")
-    private int controlnumber;
+    private String controlNumber;
 
     @JsonProperty("repItem")
     private String repItem;
@@ -30,6 +30,12 @@ public class BusanAirQualityDTO {
 
     @JsonProperty("so2Cai")
     private String so2Cai;
+
+    @JsonProperty("no2")
+    private Double no2;
+
+    @JsonProperty("no2Cai")
+    private String no2Cai;
 
     @JsonProperty("o3")
     private Double o3;
