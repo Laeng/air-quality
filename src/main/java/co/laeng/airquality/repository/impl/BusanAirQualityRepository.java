@@ -34,6 +34,6 @@ public class BusanAirQualityRepository implements StateAirQualityRepository {
 
     @Override
     public StateType getStateType() {
-        return StateType.SEOUL;
+        return StateType.BUSAN;
     }
 }

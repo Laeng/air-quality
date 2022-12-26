@@ -1,11 +1,8 @@
 package co.laeng.airquality.type;
 
-import lombok.Getter;
-
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
-@Getter
 public enum StateType {
     SEOUL("seoul"),
     BUSAN("busan");
@@ -18,9 +15,14 @@ public enum StateType {
 
     public static StateType from(String name) throws NoSuchElementException {
         return Arrays.stream(StateType.values())
-                .filter(type -> type.getState().equals(name.toLowerCase()))
+                .filter(type -> type.toString().equals(name.toLowerCase()))
                 .findFirst()
                 .orElseThrow();
+    }
+
+    @Override
+    public String toString() {
+        return this.state;
     }
 
 }

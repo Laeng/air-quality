@@ -6,18 +6,18 @@ import co.laeng.airquality.dto.PollutantDTO;
 import co.laeng.airquality.repository.StateAirQualityRepository;
 import co.laeng.airquality.type.PollutantType;
 import co.laeng.airquality.type.StateType;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class AirQualityService {
 
-    private List<StateAirQualityRepository> stateAirQualityRepositories;
+    private final List<StateAirQualityRepository> stateAirQualityRepositories;
 
     @Autowired
     public AirQualityService(
@@ -46,10 +46,15 @@ public class AirQualityService {
     }
 
     private StateAirQualityRepository getStateRepository(StateType state) {
-        return this.stateAirQualityRepositories.stream()
-                .filter(repository -> repository.getStateType() == state)
-                .findFirst()
-                .orElseThrow();
+        try {
+            return this.stateAirQualityRepositories.stream()
+                    .filter(repository -> repository.getStateType().equals(state))
+                    .findFirst()
+                    .orElseThrow();
+        } catch (RuntimeException exception) {
+            String message = String.format("[service] %s 에 대한 리포지토리를 찾을 수 없습니다.", state.toString());
+            throw new RuntimeException(message, exception);
+        }
     }
 
     private PollutantDTO createPM25AverageDTO(List<CityPollutionDTO> pollutions) {

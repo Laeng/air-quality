@@ -45,7 +45,7 @@ class AirQualityControllerTest{
                         getDocumentRequest(),
                         getDocumentResponse(),
                         pathParameters(
-                                parameterWithName("state").description("조회할 광역시를 입력. 현재 seoul 만 지원합니다.")
+                                parameterWithName("state").description("조회할 광역시를 입력. 현재 지원 중인 곳은 seoul, busan 입니다.")
                         ),
                         requestParameters(
                                 parameterWithName("city").description("지역 이름을 입력. 한글 이름을 입력하세요.").optional()
@@ -64,6 +64,15 @@ class AirQualityControllerTest{
                                 .andWithPrefix("cities[].co.", this.fieldPollutant())
                                 .andWithPrefix("cities[].so2.", this.fieldPollutant())
                 ));
+    }
+
+    @Test
+    void 부산시_대기질_가져오기() throws Exception {
+        String state = "busan";
+        String city = "태종대";
+
+        this.mockMvc.perform(get("/api/v1/air-quality/{state}?city={city}", state, city))
+                .andExpect(status().isOk());
     }
 
     private FieldDescriptor[] fieldPollutant() {
