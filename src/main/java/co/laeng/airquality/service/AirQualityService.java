@@ -46,15 +46,12 @@ public class AirQualityService {
     }
 
     private StateAirQualityRepository getStateRepository(StateType state) {
-        try {
-            return this.stateAirQualityRepositories.stream()
-                    .filter(repository -> repository.getStateType().equals(state))
-                    .findFirst()
-                    .orElseThrow();
-        } catch (RuntimeException exception) {
-            String message = String.format("[service] %s 에 대한 리포지토리를 찾을 수 없습니다.", state.toString());
-            throw new RuntimeException(message, exception);
-        }
+        String message = String.format("[service] %s 에 대한 리포지토리를 찾을 수 없습니다.", state.toString());
+
+        return this.stateAirQualityRepositories.stream()
+                .filter(repository -> repository.getStateType().equals(state))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException(message));
     }
 
     private PollutantDTO createPM25AverageDTO(List<CityPollutionDTO> pollutions) {
