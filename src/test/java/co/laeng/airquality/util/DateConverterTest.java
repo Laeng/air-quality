@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class DateConverterTest {
 
-    @ParameterizedTest(name = "ISO8601 변환 테스트 데이터")
+    @ParameterizedTest(name = "ISO8601 변환 테스트")
     @MethodSource("ISO_8601_변환_테스트_데이터")
     void ISO_8601_변환_테스트(String datetime, String result) {
         String iso8601 = DateConverter.toISO8601(datetime);
@@ -23,8 +23,8 @@ class DateConverterTest {
 
     static Stream<Arguments> ISO_8601_변환_테스트_데이터() {
         return Stream.of(
-                Arguments.of("202212161400", "2022-12-16T14:00:00"),
-                Arguments.of("2022121614", "2022-12-16T14:00:00")
+                Arguments.of("202212161400", "2022-12-16T14:00:00+09:00[Asia/Seoul]"),
+                Arguments.of("2022121614", "2022-12-16T14:00:00+09:00[Asia/Seoul]")
         );
     }
 }
