@@ -33,7 +33,7 @@ public class SeoulAirQualityRepository implements StateAirQualityRepository {
     }
 
     @Override
-    public StateType getStateType() {
+    public StateType getState() {
         return StateType.SEOUL;
     }
 }

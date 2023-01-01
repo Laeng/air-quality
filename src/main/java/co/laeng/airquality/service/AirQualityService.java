@@ -3,32 +3,31 @@ package co.laeng.airquality.service;
 import co.laeng.airquality.dto.AirQualityDTO;
 import co.laeng.airquality.dto.CityPollutionDTO;
 import co.laeng.airquality.dto.PollutantDTO;
-import co.laeng.airquality.repository.StateAirQualityRepository;
+import co.laeng.airquality.factory.StateAirQualityRepositoryFactory;
 import co.laeng.airquality.type.PollutantType;
 import co.laeng.airquality.type.StateType;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
 @Service
 public class AirQualityService {
 
-    private final List<StateAirQualityRepository> stateAirQualityRepositories;
+    private final StateAirQualityRepositoryFactory stateAirQualityRepositoryFactory;
 
-    @Autowired
     public AirQualityService(
-            List<StateAirQualityRepository> stateAirQualityRepositories
+            StateAirQualityRepositoryFactory stateAirQualityRepositoryFactory
     ) {
-        this.stateAirQualityRepositories = stateAirQualityRepositories;
+        this.stateAirQualityRepositoryFactory = stateAirQualityRepositoryFactory;
     }
 
     public AirQualityDTO getAirQuality(String state) {
         try {
-            List<CityPollutionDTO> pollutions = this.getStateRepository(StateType.from(state)).getCityPollution();
+            List<CityPollutionDTO> pollutions = this.stateAirQualityRepositoryFactory
+                    .getAirQualityRepository(StateType.from(state))
+                    .getCityPollution();
 
             return this.createAirQualityDTO(
                     state.toLowerCase(),
@@ -37,21 +36,8 @@ public class AirQualityService {
             );
 
         } catch (RuntimeException exception) {
-            System.out.println(exception.getMessage());
-            Arrays.stream(exception.getStackTrace())
-                    .forEach(e -> System.out.println(e.toString()));
-
             return this.createAirQualityDTO(null, null, null);
         }
-    }
-
-    private StateAirQualityRepository getStateRepository(StateType state) {
-        String message = String.format("[service] %s 에 대한 리포지토리를 찾을 수 없습니다.", state.toString());
-
-        return this.stateAirQualityRepositories.stream()
-                .filter(repository -> repository.getStateType().equals(state))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException(message));
     }
 
     private PollutantDTO createPM25AverageDTO(List<CityPollutionDTO> pollutions) {
