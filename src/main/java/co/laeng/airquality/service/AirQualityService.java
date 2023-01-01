@@ -26,7 +26,7 @@ public class AirQualityService {
     public AirQualityDTO getAirQuality(String state) {
         try {
             List<CityPollutionDTO> pollutions = this.stateAirQualityRepositoryFactory
-                    .getAirQualityRepository(StateType.from(state))
+                    .getRepository(StateType.from(state))
                     .getCityPollution();
 
             return this.createAirQualityDTO(

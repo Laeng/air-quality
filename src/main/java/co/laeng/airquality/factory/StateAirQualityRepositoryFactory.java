@@ -17,7 +17,7 @@ public class StateAirQualityRepositoryFactory {
         this.stateAirQualityRepositories = stateAirQualityRepositories;
     }
 
-    public StateAirQualityRepository getAirQualityRepository(StateType state) {
+    public StateAirQualityRepository getRepository(StateType state) {
         String message = String.format("[Repository] %s 에 대한 리포지토리를 찾을 수 없습니다.", state.toString());
 
         return this.stateAirQualityRepositories.stream()
