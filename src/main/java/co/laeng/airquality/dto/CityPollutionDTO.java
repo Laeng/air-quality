@@ -7,15 +7,19 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CityPollutionDTO {
-    private final String city;
-    private final PollutantDTO pm25;
-    private final PollutantDTO pm10;
-    private final PollutantDTO o3;
-    private final PollutantDTO no2;
-    private final PollutantDTO co;
-    private final PollutantDTO so2;
+    private String city;
+    private PollutantDTO pm25;
+    private PollutantDTO pm10;
+    private PollutantDTO o3;
+    private PollutantDTO no2;
+    private PollutantDTO co;
+    private PollutantDTO so2;
 
-    private final String updateAt;
+    private String updateAt;
+
+    public CityPollutionDTO() {
+
+    }
 
     @Builder
     public CityPollutionDTO(

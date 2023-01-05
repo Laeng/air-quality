@@ -7,9 +7,13 @@ import java.util.List;
 
 @Getter
 public class AirQualityDTO {
-    private final String state;
-    private final PollutantDTO stateAvg;
-    private final List<CityPollutionDTO> cities;
+    private String state;
+    private PollutantDTO stateAvg;
+    private List<CityPollutionDTO> cities;
+
+    public AirQualityDTO() {
+
+    }
 
     @Builder
     public AirQualityDTO(String state, PollutantDTO stateAvg, List<CityPollutionDTO> cities) {

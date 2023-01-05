@@ -5,6 +5,7 @@ import co.laeng.airquality.dto.CityPollutionDTO;
 import co.laeng.airquality.service.AirQualityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ public class AirQualityController {
     }
 
     @GetMapping("/{state}")
+    @Cacheable(cacheNames = "getAirQuality", key = "#state + #city")
     public AirQualityDTO getAirQuality(
             @PathVariable(name = "state") String state,
             @RequestParam(name = "city", required = false) String city

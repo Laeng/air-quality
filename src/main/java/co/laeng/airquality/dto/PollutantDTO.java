@@ -15,6 +15,10 @@ public class PollutantDTO {
     private double value;
     private String status;
 
+    public PollutantDTO() {
+
+    }
+
     @Builder
     public PollutantDTO(PollutantType pollutant, double value) {
         this.name = pollutant.getName();
