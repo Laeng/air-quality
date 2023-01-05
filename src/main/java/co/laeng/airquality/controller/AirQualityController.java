@@ -27,7 +27,7 @@ public class AirQualityController {
     }
 
     @GetMapping("/{state}")
-    public ResponseEntity<AirQualityDTO> getAirQuality(
+    public AirQualityDTO getAirQuality(
             @PathVariable(name = "state") String state,
             @RequestParam(name = "city", required = false) String city
     ) {
@@ -46,10 +46,10 @@ public class AirQualityController {
                         List.of(cityPollution));
             }
 
-            return new ResponseEntity<>(dto, new HttpHeaders(), HttpStatus.OK);
+            return dto;
 
         } catch (RuntimeException exception) {
-            return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
+            return new AirQualityDTO(null, null, null);
         }
     }
 }
