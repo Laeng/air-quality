@@ -7,6 +7,8 @@ import co.laeng.airquality.repository.StateAirQualityRepository;
 import co.laeng.airquality.type.StateType;
 import co.laeng.airquality.util.AirQualityDtoConverter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,7 +21,18 @@ public class BusanAirQualityRepository implements StateAirQualityRepository {
     private String key;
 
     @Override
+    @Cacheable(cacheNames = "getCityPollution")
     public List<CityPollutionDTO> getCityPollution() throws RuntimeException {
+        return this.callCityPollutionApi();
+    }
+
+    @Override
+    @CachePut(cacheNames = "getCityPollution")
+    public List<CityPollutionDTO> update() {
+        return this.callCityPollutionApi();
+    }
+
+    private List<CityPollutionDTO> callCityPollutionApi() {
         if (this.key == null) {
             throw new RuntimeException("[repository] 부산시 대기질 API 인증 키를 찾을 수 없습니다.");
         }

@@ -35,12 +35,21 @@ public class RedisCacheConfig {
 
     @Bean
     public RedisCacheManagerBuilderCustomizer redisCacheManagerBuilderCustomizer() {
-        return (builder) -> builder.withCacheConfiguration(
-                "getAirQuality",
-                RedisCacheConfiguration.defaultCacheConfig()
-                        .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
-                        .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
-                        .entryTtl(Duration.ofHours(1))
-        );
+        return (builder) -> {
+            builder.withCacheConfiguration(
+                    "getAirQuality",
+                    RedisCacheConfiguration.defaultCacheConfig()
+                            .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
+                            .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
+                            .entryTtl(Duration.ofMinutes(15))
+            );
+            builder.withCacheConfiguration(
+                    "getCityPollution",
+                    RedisCacheConfiguration.defaultCacheConfig()
+                            .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
+                            .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
+                            .entryTtl(Duration.ofHours(1))
+            );
+        };
     }
 }
